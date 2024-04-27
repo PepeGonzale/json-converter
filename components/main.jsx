@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import JSON from "./conversion/json"
 import CSV from "./conversion/csv"
+import { splitJson } from "@/utils/utils"
 
 export default function Main() 
 {
@@ -13,12 +14,22 @@ export default function Main()
             console.log('response', response)
         })
     }, [])
-    const handleInputJson = (value) => {
-        console.log('value', value.target.value)
-        setInputJson(value.target.value)
+    const handleInputJson = (value, mode="file") => {
+        if (mode != "text") {
+            setInputJson(value.target.value);
+        } else {
+            setInputJson(value);
+            setOutputJson(splitJson(value))
+        }
+    }
+    const handleOutputJson = (value) => {
+        console.log(value, 'handle output json');
+        setOutputJson(value)
     }
     const handleTranslation = () => {
         console.log('SENDING REQUEST', inputJson)
+        // TODO cambiar el valor por parse a csv o json dependiendo de en que modo este
+        handleOutputJson(inputJson)
     }
     return (
         <div className="text-center">
@@ -30,7 +41,7 @@ export default function Main()
                     Translate
                 </button>
             </div>
-            <CSV />
+            <CSV outputJson={outputJson} />
         </div>
         </div>
     )

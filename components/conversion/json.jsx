@@ -1,5 +1,6 @@
 import { useState } from "react";
 import UploadFile from "../ui/upload-file";
+import { splitJson } from "@/utils/utils";
 
 export default function JSON({
     inputJson,
@@ -13,7 +14,7 @@ export default function JSON({
 
         reader.onload = (e) => {
             const content = e.target.result;
-            console.log(content)
+            handleInputJson(content, "text")
         }
 
         reader.readAsText(file);
