@@ -14,13 +14,30 @@ export default function Main()
             console.log('response', response)
         })
     }, [])
-    const handleInputJson = (value, mode="file") => {
+    const handleInputJson = async  (value, mode="file") => {
         if (mode != "text") {
             setInputJson(value.target.value);
         } else {
             setInputJson(value);
             setOutputJson(splitJson(value))
+            setTimeout(() => {
+                handleDownload()
+            }, 50)
         }
+    }
+    const handleDownload = () => {
+        console.log(outputJson)
+        const blob = new Blob([outputJson], { type: "text/csv "});
+        const url = window.URL.createObjectURL(blob);
+    
+    // Crear un enlace y hacer clic en él para descargar el archivo CSV
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'test.csv';
+        link.click();
+    
+    // Liberar el objeto URL
+    window.URL.revokeObjectURL(url);
     }
     const handleOutputJson = (value) => {
         console.log(value, 'handle output json');
