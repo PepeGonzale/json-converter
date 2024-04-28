@@ -9,7 +9,7 @@ export default function CSV({
                 <div className="m-6">
                     CSV
                 </div>
-                <textarea value={outputJson} onChange={handleTextareaChange} className="textarea textarea-lg h-[700px] w-[600px]">
+                <textarea value={outputJson} onChange={handleTextareaChange} className="textarea textarea-lg h-[600px] w-[600px]">
                 </textarea>
             </div>
     )

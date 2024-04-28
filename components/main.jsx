@@ -1,19 +1,25 @@
 'use client'
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import JSON from "./conversion/json"
 import CSV from "./conversion/csv"
 import { splitJson } from "@/utils/utils"
+import Tab from "./ui/tab"
 
 export default function Main() 
 {
     const [inputJson, setInputJson] = useState('')
     const [outputJson, setOutputJson] = useState('')
+    const [selectedTab, setSelectedTab] = useState("json");
+    const [outputFileName, setOutputFilename] = useState('')
 
     useEffect(() => {
         fetch('/api/json').then(response => {
             console.log('response', response)
         })
     }, [])
+    useMemo(() => {
+        console.log('hey selected tab change', selectedTab)
+    }, [selectedTab])
     const handleInputJson = async  (value, mode="file") => {
         if (mode != "text") {
             setInputJson(value.target.value);
@@ -31,7 +37,7 @@ export default function Main()
     // Crear un enlace y hacer clic en él para descargar el archivo CSV
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'test.csv';
+        link.download = outputFileName != '' ? outputFileName + '.csv' : 'test.csv';
         link.click();
     
     // Liberar el objeto URL
@@ -43,22 +49,41 @@ export default function Main()
     }
     const handleTranslation = () => {
         console.log('SENDING REQUEST', inputJson)
-        // TODO cambiar el valor por parse a csv o json dependiendo de en que modo este
-        handleOutputJson(inputJson)
+
         handleDownload()
 
     }
+    const handleOutputName = (e) => {
+        setOutputFilename(e.target.value)
+    }
+    
     return (
         <div className="text-center">
             <h1>Convert JSON to CSV FAST</h1>
+            <Tab setSelectedTab={setSelectedTab} selectedTab={selectedTab}/>
         <div className="flex">
-            <JSON inputJson={inputJson} handleInputJson={handleInputJson} />
+            {
+                selectedTab == 'json' ? (<> <JSON inputJson={inputJson} handleInputJson={handleInputJson} outputFileName={outputFileName} handleOutputName={handleOutputName} /> 
+            
             <div className="text-center items-center m-auto ml-24">
                 <button className="btn btn-primary" onClick={handleTranslation}>
                     Translate
                 </button>
             </div>
+            
             <CSV outputJson={outputJson} />
+            </>)
+            :
+            <> <JSON inputJson={inputJson} handleInputJson={handleInputJson} outputFileName={outputFileName} handleInputChange={handleOutputName} /> 
+            
+            <div className="text-center items-center m-auto ml-24">
+                <button className="btn btn-primary" onClick={handleTranslation}>
+                    Translate
+                </button>
+            </div>
+            
+            <CSV outputJson={outputJson} /> </>
+}
         </div>
         </div>
     )
