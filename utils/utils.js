@@ -12,8 +12,8 @@ module.exports = {
         // create row for each tag
           let row = `${tag}`; 
           languages.forEach(language => {
-            let value = files[language][tag] || ""; // Obtener el valor de la traducción
-            row += `,"${value.replace(/"/g, '""')}"`; // Encerrar el valor entre comillas y manejar comillas dentro del valor
+            let value = files[language][tag] || ""; 
+            row += `,"${value.replace(/"/g, '""')}"`; 
        
           });
           console.log(row)
