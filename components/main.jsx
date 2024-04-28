@@ -20,9 +20,7 @@ export default function Main()
         } else {
             setInputJson(value);
             setOutputJson(splitJson(value))
-            setTimeout(() => {
-                handleDownload()
-            }, 50)
+            
         }
     }
     const handleDownload = () => {
@@ -47,6 +45,8 @@ export default function Main()
         console.log('SENDING REQUEST', inputJson)
         // TODO cambiar el valor por parse a csv o json dependiendo de en que modo este
         handleOutputJson(inputJson)
+        handleDownload()
+
     }
     return (
         <div className="text-center">
